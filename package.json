@@ -4,11 +4,14 @@
   "private": true,
   "dependencies": {
     "antd": "^3.0.1",
+    "prettier": "^1.9.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-scripts": "^1.0.17"
   },
   "scripts": {
+    "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}",
+    "format": "prettier --list-different --single-quote --print-width=120 **/*.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
