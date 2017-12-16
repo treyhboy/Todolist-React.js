@@ -4,14 +4,18 @@
   "private": true,
   "dependencies": {
     "antd": "^3.0.1",
+    "jquery": "^3.2.1",
     "prettier": "^1.9.2",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-scripts": "^1.0.17"
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
+    "react-redux": "^5.0.6",
+    "react-scripts": "^1.0.17",
+    "redux": "^3.7.2",
+    "redux-immutable-state-invariant": "^2.1.0"
   },
   "scripts": {
     "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}",
-    "format": "prettier --list-different --single-quote --print-width=120 **/*.js",
+    "format": "prettier --single-quote --print-width=120 --write ./src/**/**.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
