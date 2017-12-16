@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import EList from "./List";
+import { connect } from "react-redux";
 import { Button, Input, Col, Icon, Row } from "antd";
 import "antd/dist/antd.css";
 import "./App.css";
+import * as todoactions from "./Actions/TodoAction";
+import { bindActionCreators } from "redux";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { item: [], value: "" };
+    this.state = { value: "" };
     this.handlechange = this.handlechange.bind(this);
+    this.handleenter = this.handleenter.bind(this);
     this.handleclick = this.handleclick.bind(this);
     this.handledel = this.handledel.bind(this);
     this.handleadd = this.handleadd.bind(this);
@@ -16,53 +20,30 @@ class App extends Component {
     this.handledown = this.handledown.bind(this);
   }
 
-  handlechange(event) {
-    this.setState({ value: event.target.value });
+  handleenter(e) {
+    var code = e.key;
+    {
+      code === "Enter" && this.handleadd();
+    }
+  }
+  handlechange(e) {
+    this.setState({ value: e.target.value });
   }
   handleadd() {
-    const val = this.state.value;
-    const ob = { val: val, class: "nos" };
-    this.setState(prevState => {
-      return { item: [...prevState.item, ob], value: "" };
-    });
+    this.props.actions.createtodo(this.state.value);
+    this.setState({ value: "" });
   }
   handledel() {
-    this.setState(prevState => {
-      return {
-        item: prevState.item.filter((item, i, a) => {
-          return item.class !== "strike";
-        }),
-        value: ""
-      };
-    });
+    this.props.actions.deltodo();
   }
   handleclick(k, i) {
-    this.setState(prevState => {
-      var n = prevState.item;
-      console.log(k);
-      n.splice(i, 1, {
-        val: k.innerText,
-        class: k.className === "strike" ? "nos" : "strike"
-      });
-      console.log(n);
-      return { item: n, value: "" };
-    });
+    this.props.actions.striketodo(k, i);
   }
   handleup(i) {
-    this.setState(prevState => {
-      var n = prevState.item;
-      var m = n.splice(i, 1);
-      n.splice(i - 1, 0, ...m);
-      return { item: n, value: "" };
-    });
+    this.props.actions.moveup(i);
   }
   handledown(i) {
-    this.setState(prevState => {
-      var n = prevState.item;
-      var m = n.splice(i, 1);
-      n.splice(i + 1, 0, ...m);
-      return { item: n, value: "" };
-    });
+    this.props.actions.movedown(i);
   }
 
   render() {
@@ -77,6 +58,7 @@ class App extends Component {
               size="large"
               placeholder="Enter Todo"
               value={this.state.value}
+              onKeyDown={this.handleenter}
               onChange={this.handlechange}
             />
           </Col>
@@ -95,7 +77,7 @@ class App extends Component {
           <Row type="flex" align="bottom" justify="left">
             <Col span={12} offset={6}>
               <EList
-                item={this.state.item}
+                item={this.props.item}
                 delfun={this.handleclick}
                 downfun={this.handledown}
                 upfun={this.handleup}
@@ -107,5 +89,14 @@ class App extends Component {
     );
   }
 }
-
-export default App;
+function mapstatetoprops(state, ownprops) {
+  return {
+    item: state.todoReducer
+  };
+}
+function mapdispatchtoprops(dispatch) {
+  return {
+    actions: bindActionCreators(todoactions, dispatch)
+  };
+}
+export default connect(mapstatetoprops, mapdispatchtoprops)(App);
