@@ -1,3 +1,6 @@
+## Introduction 
+This application is written in React Js and other library used are Redux Ant design . Contributing in the project will give you a basic level idea on React Js functioning with redux.
+ 
 ## Table of Contents
 
 - [Updating to New Releases](#updating-to-new-releases)
